@@ -8,3 +8,4 @@ fsspec
 huggingface_hub
 datasets
 mlxtend
+nltk
