@@ -188,18 +188,29 @@ def SuperMain():
             ["Itemsets Support and Confidence", "Highest Confidence", "Highest Support"]
         )
 
+        # Function to format float or convert and format string
+        def format_value(x):
+            try:
+                return f"{float(x):.4f}"
+            except ValueError:
+                return x  # Return as is if it's not a valid float
+
+        # Format support and confidence to 4 decimal places
+        rules['support'] = rules['support'].apply(format_value)
+        rules['confidence'] = rules['confidence'].apply(format_value)
+
         if sort_option == "Highest Confidence":
             confidence_threshold = 0.54
-            high_confidence_rules = rules[rules['confidence'] > confidence_threshold]
-            high_confidence_rules = high_confidence_rules.sort_values(by='confidence', ascending=False)
+            high_confidence_rules = rules[rules['confidence'].apply(lambda x: float(x) > confidence_threshold)]
+            high_confidence_rules = high_confidence_rules.sort_values(by='confidence', ascending=False, key=lambda x: x.astype(float))
             table = high_confidence_rules[['antecedents', 'consequents', 'confidence']]
             st.markdown("### Itemsets with High Confidence")
             st.write(table)
 
         elif sort_option == "Highest Support":
             support_threshold = 0.02
-            high_support_rules = rules[rules['support'] > support_threshold]
-            high_support_rules = high_support_rules.sort_values(by='support', ascending=False)
+            high_support_rules = rules[rules['support'].apply(lambda x: float(x) > support_threshold)]
+            high_support_rules = high_support_rules.sort_values(by='support', ascending=False, key=lambda x: x.astype(float))
             table = high_support_rules[['antecedents', 'consequents', 'support']]
             st.markdown("### Itemsets with High Support")
             st.write(table)
