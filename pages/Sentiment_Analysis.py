@@ -105,7 +105,7 @@ def display_classification_report(y_true, y_pred):
     st.dataframe(report)
 
     # Display Accuracy score
-    st.write(f"**Accuracy Score:** {accuracy:.2f}")
+    st.write(f"**Accuracy Score:** {accuracy*100:.2f}%")
 
 # display Confusion matrix
 def display_confusion_matrix(y_true, y_pred):
@@ -187,7 +187,7 @@ with tab3:
     # User input for live sentiment prediction
     st.markdown("### Predict Sentiment for Your Own Comment")
     user_comment = st.text_input("Enter a comment:").lower()
-    MIN_WORD_COUNT = 1
+    MIN_WORD_COUNT = 5
     if user_comment:
         cleaned_comment = pre_process(user_comment)
         word_count = len(cleaned_comment.split())  # Count words in cleaned comment
