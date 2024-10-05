@@ -222,6 +222,43 @@ def SuperMain():
 
     SupportAndConfidence()
 
+    def Top2Itemsets():
+        st.markdown("### Top 10 2-Itemsets with Highest Support")
+        
+        itemsets_2 = frequent_itemsets[frequent_itemsets['itemsets'].apply(lambda x: len(x.split(', ')) == 2)]
+        itemsets_2['itemsets'] = itemsets_2['itemsets'].apply(lambda x: ' → '.join(x.split(', ')))
+
+        # Sort by support and get top 10
+        top_10_itemsets = itemsets_2.sort_values('support', ascending=False).head(10)
+
+        # Create the horizontal bar chart
+        fig, ax = plt.subplots(figsize=(17, 8))
+        bars = ax.barh(top_10_itemsets['itemsets'], top_10_itemsets['support'], color='teal')
+
+        # Customize the plot
+        ax.set_title('Top 10 2-Itemsets with Highest Support', fontsize=16)
+        ax.set_xlabel('Support', fontsize=12)
+        ax.set_ylabel('Itemsets', fontsize=12)
+
+        # Adjust y-axis labels
+        ax.tick_params(axis='y', labelsize=12)
+
+        # Add value labels to the end of each bar
+        for bar in bars:
+            width = bar.get_width()
+            ax.text(width, bar.get_y() + bar.get_height()/2, f'{width:.4f}', 
+                    ha='left', va='center', fontsize=8)
+
+        # Invert y-axis to match the image order
+        ax.invert_yaxis()
+
+        # Adjust layout and display
+        plt.tight_layout()
+        st.pyplot(fig)
+        plt.close()
+
+    Top2Itemsets()
+
 if df is not None:
     st.write("Data loaded successfully!")
     SuperMain()
