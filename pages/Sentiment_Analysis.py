@@ -52,6 +52,7 @@ def sentiment_analysis(df_implementation):
     proba_implementation = model.predict_proba(X_implementation)
     confidence_scores = proba_implementation.max(axis=1)  # Confidence of the predicted class
     df_implementation['accuracy'] = confidence_scores * 100  # Convert to percentage
+    df_implementation['accuracy'] = df_implementation['accuracy'].apply(lambda x: f"{x:.2f}") # Convert all rows into 2 decimal places
     
     # Calculate classification report and accuracy score
     y_true = df_implementation['sentiment']
@@ -88,7 +89,8 @@ def count_words_by_sentiment(df, vectorizer):
 
 # Function to display output
 def display_output(df):
-    st.write(df)
+    df['true_sentiment'] = df['sentiment']
+    st.write(df[['comment', 'true_sentiment', 'predicted_sentiment', 'accuracy']])
 
 # Function to predict sentiment for user input
 def predict_sentiment(user_comment, vectorizer, model):
